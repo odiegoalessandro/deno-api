@@ -4,4 +4,5 @@ export interface ITodo {
   _id: Types.ObjectId;
   description: string;
   isCompleted: boolean;
+  userId: Types.ObjectId
 }

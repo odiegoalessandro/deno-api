@@ -26,13 +26,17 @@ export class Env {
     return password
   }
 
-  static get jwtSecret() {
-    return Deno.env.get('JWT_SECRET') ??
-      'SDNuuJ3zhxLoZiYVXiBEq+X6H2SgIAnXE+ZIB7Fk5dk='
-  }
+  static get port(): number | null {
+    const port = Deno.env.get('PORT')
+    if (!port) {
+      return null
+    }
+    
+    if (!is.number(port)){ 
+      throw new Error(`Invalid PORT: ${port}`)
+    }
 
-  static get jwtAuthAlgorithm() {
-    return 'HS256'
+    return Number(port)
   }
 
   static get mongodbUsername(): string | null {
@@ -73,9 +77,5 @@ export class Env {
     if (!is.number(mongodbMaxPoolSize)) throw new Error(`Invalid MONGODB_MAX_POOL_SIZE: ${mongodbMaxPoolSize}`)
 
     return Number(mongodbMaxPoolSize)
-  }
-
-  static get authAccessTokenExpiration() {
-    return 36000000 // 10 hours
   }
 }

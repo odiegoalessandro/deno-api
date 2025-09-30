@@ -2,7 +2,6 @@ import mongoose, { Schema, SchemaDefinition, SchemaOptions, Types } from 'mongoo
 import { Time } from '../utilities/static/Time.ts'
 
 import is from '@zarco/isness'
-import aggregatePaginate from 'mongoose-sequence'
 
 export const required = (message: string) => [true, message] as [boolean, string]
 
@@ -144,6 +143,5 @@ export abstract class BaseSchema {
       schemaOptions,
     )
 
-    this.schema.plugin(aggregatePaginate)
   }
 }
