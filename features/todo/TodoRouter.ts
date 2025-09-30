@@ -40,6 +40,7 @@ TodoRouter.post('/', todoController.create)
  *           type: integer
  *       - in: query
  *         name: limit
+ *         schema:
  *           type: integer
  *     responses:
  *       200:
