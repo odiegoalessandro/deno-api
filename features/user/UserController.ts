@@ -21,7 +21,7 @@ class UserController {
       password,
     } as IUser)
 
-    return res.status(201).json(user)
+    return res.send_created("User created", user)
   }
 
   findAll = async (req: Request, res: Response) => {
@@ -34,7 +34,7 @@ class UserController {
       this.userRepository.countDocuments({})
     ])
 
-    return res.status(200).json({
+    return res.send_ok("Users found successfully", {
       data: users,
       page,
       limit,
@@ -51,7 +51,7 @@ class UserController {
       return throwlhos.err_notFound('User not found')
     }
 
-    return res.status(200).json(user)
+    return res.send_ok("User found successfully", user)
   }
 
   update = async (req: Request, res: Response) => {
@@ -64,13 +64,13 @@ class UserController {
       password,
     } as IUser)
 
-    return res.status(200).json(user)
+    return res.send_ok("User updated successfully", user)
   }
 
   delete = async (req: Request, res: Response) => {
     const { id } = req.params
     await this.userRepository.deleteById(id)
-    return res.status(204).send()
+    return res.send_noContent("User deleted successfully")
   }
 }
 

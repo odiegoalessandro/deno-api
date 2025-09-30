@@ -19,7 +19,7 @@ class TodoController {
       userId,
     } as ITodo)
 
-    return res.status(201).json(todo)
+    return res.send_created("TODO created successfully", todo)
   }
 
   findAll = async (req: Request, res: Response) => {
@@ -32,7 +32,7 @@ class TodoController {
       this.todoRepository.countDocuments({})
     ])
 
-    return res.status(200).json({
+    return res.send_ok("TODOs found successfully", {
       data: todos,
       page,
       limit,
@@ -49,7 +49,7 @@ class TodoController {
       return throwlhos.err_notFound('Todo not found')
     }
 
-    return res.status(200).json(todo)
+    return res.send_ok("TODO found successfully", todo)
   }
 
   findByUser = async (req: Request, res: Response) => {
@@ -63,7 +63,7 @@ class TodoController {
 
     const result = await this.todoRepository.findByUser(new Types.ObjectId(userId), page, limit, isCompleted)
 
-    return res.status(200).json(result)
+    return res.send_ok("TODOs by user found successfully", result)
   }
 
   toggleStatus = async (req: Request, res: Response) => {
@@ -76,17 +76,17 @@ class TodoController {
 
       await this.todoRepository.updateById(id, { isCompleted: todo.isCompleted })
 
-      return res.status(200).json(todo)
+      return res.send_ok("TODO updated successfully", todo)
     }
     
-    throwlhos.err_notFound('Todo not found')
+    throwlhos.err_notFound('TODO not found')
   }
 
   delete = async (req: Request, res: Response) => {
     const { id } = req.params
     
     await this.todoRepository.deleteById(id)
-    return res.status(204).send()
+    return res.send_noContent("TODO deleted succesfully")
   }
 }
 

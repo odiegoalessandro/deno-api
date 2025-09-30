@@ -1,5 +1,6 @@
 import express, { Express } from 'express'
 import morgan from 'morgan'
+import responser from 'responser'
 import { Swagger } from '../docs/Swagger.ts'
 
 export abstract class AbstractEnvironment {
@@ -15,6 +16,7 @@ export abstract class AbstractEnvironment {
 
   protected initializeDefaultMiddlewares(server: Express): void {
     server.use(morgan('dev'))
+    server.use(responser.default)
     server.use(express.json())
     server.use(express.urlencoded({ extended: true }))
     server.use(new Swagger().setupAndServe())

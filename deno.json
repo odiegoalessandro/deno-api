@@ -8,7 +8,8 @@
     "mongoose-sequence": "npm:mongoose-sequence@6.0.1",
     "@zarco/isness": "jsr:@zarco/isness@^0.1.18",
     "express": "npm:express@^4.18.2",
-    "morgan": "npm:morgan@^1.10.0"
+    "morgan": "npm:morgan@^1.10.0",
+    "responser": "npm:responser@*"
   },
     "compilerOptions": {
     "strict": true,
