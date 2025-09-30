@@ -1,5 +1,6 @@
 import express, { Express } from 'express'
 import morgan from 'morgan'
+import { Swagger } from '../docs/Swagger.ts'
 
 export abstract class AbstractEnvironment {
   public port: number
@@ -13,14 +14,15 @@ export abstract class AbstractEnvironment {
   }
 
   protected initializeDefaultMiddlewares(server: Express): void {
+    server.use(morgan('dev'))
     server.use(express.json())
     server.use(express.urlencoded({ extended: true }))
-    server.use(morgan('dev'))
+    server.use(new Swagger().setupAndServe())
   }
 
   protected listen(server: Express): void {
     server.listen(this.port, this.ip, () => {
-      console.log(`Listening at ${this.ip || '0.0.0.0'}:${this.port}`)
+      console.log(`Listening at ${this.ip || 'localhost'}:${this.port}`)
     })
   }
 }

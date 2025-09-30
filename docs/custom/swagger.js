@@ -1,0 +1,1 @@
+console.log('Swagger custom JS file')

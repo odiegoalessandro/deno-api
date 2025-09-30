@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Types } from 'mongoose'
 import { throwlhos } from '../../globals/Throwlhos.ts'
 import { ITodo } from '../../models/Todo/ITodo.ts'
 import { TodoRepository } from '../../models/Todo/TodoRepository.ts'
@@ -55,9 +56,12 @@ class TodoController {
     const { userId } = req.params
     const page = Math.max(1, Number(req.query.page) || 1)
     const limit = Math.max(1, Number(req.query.limit) || 10)
-    const isCompleted: boolean = req.query.isCompleted || null
+    const isCompleted: boolean | null =
+      req.query.isCompleted === undefined
+        ? null
+        : req.query.isCompleted === 'true';
 
-    const result = await this.todoRepository.findByUser(userId, page, limit, isCompleted)
+    const result = await this.todoRepository.findByUser(new Types.ObjectId(userId), page, limit, isCompleted)
 
     return res.status(200).json(result)
   }
@@ -80,6 +84,7 @@ class TodoController {
 
   delete = async (req: Request, res: Response) => {
     const { id } = req.params
+    
     await this.todoRepository.deleteById(id)
     return res.status(204).send()
   }
