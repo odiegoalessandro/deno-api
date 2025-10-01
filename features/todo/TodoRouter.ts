@@ -1,4 +1,6 @@
 import { Router } from 'express'
+import { Types } from 'mongoose'
+import { validateRequest } from "../../middlewares/validateRequest.ts"
 import { TodoController } from './TodoController.ts'
 
 const TodoRouter = Router()
@@ -25,7 +27,25 @@ const todoController = new TodoController()
  *       201:
  *         description: Tarefa criada
  */
-TodoRouter.post('/', todoController.create)
+TodoRouter.post(
+  '/', 
+  validateRequest(
+    ['description', 'userId'],
+    {
+      userId: {
+        validator: (v: string) => Types.ObjectId.isValid(v),
+        message: 'userId inválido',
+        isRequired: true
+      },
+      description: {
+        validator: (v: string) => typeof v === 'string' && v.trim().length > 0,
+        message: 'description deve ser uma string não vazia',
+        isRequired: true
+      }
+    }
+  ), 
+  todoController.create
+)
 
 /**
  * @openapi
@@ -76,7 +96,21 @@ TodoRouter.get('/', todoController.findAll)
  *       200:
  *         description: Lista de tarefas do usuário
  */
-TodoRouter.get('/user/:userId', todoController.findByUser)
+TodoRouter.get(
+  '/user/:userId',
+  validateRequest(
+    ['userId'],
+    {
+      userId: {
+        validator: (v: string) => Types.ObjectId.isValid(v),
+        message: 'userId inválido',
+        isRequired: true
+      }
+    },
+    "params"
+  ),
+  todoController.findByUser
+)
 
 /**
  * @openapi
@@ -96,7 +130,21 @@ TodoRouter.get('/user/:userId', todoController.findByUser)
  *       404:
  *         description: Tarefa não encontrada
  */
-TodoRouter.get('/:id', todoController.findById)
+TodoRouter.get(
+  '/:id',  
+  validateRequest(
+    ['id'],
+    {
+      id: {
+        validator: (v: string) => Types.ObjectId.isValid(v),
+        message: 'id inválido',
+        isRequired: true
+      }
+    },
+    "params"
+  ), 
+  todoController.findById
+)
 
 /**
  * @openapi
@@ -116,7 +164,20 @@ TodoRouter.get('/:id', todoController.findById)
  *       404:
  *         description: Tarefa não encontrada
  */
-TodoRouter.patch('/:id/toggle', todoController.toggleStatus)
+TodoRouter.patch(
+  '/:id/toggle', 
+  validateRequest(
+    ['id'],
+    { id: { 
+        validator: (v: string) => Types.ObjectId.isValid(v), 
+        message: 'id inválido', 
+        isRequired: true
+      } 
+    },
+    "params"
+  ),
+  todoController.toggleStatus
+)
 
 /**
  * @openapi
@@ -134,6 +195,19 @@ TodoRouter.patch('/:id/toggle', todoController.toggleStatus)
  *       204:
  *         description: Tarefa deletada
  */
-TodoRouter.delete('/:id', todoController.delete)
+TodoRouter.delete(
+  '/:id',
+  validateRequest(
+    ['id'],
+    { id: { 
+        validator: (v: string) => Types.ObjectId.isValid(v), 
+        message: 'id inválido', 
+        isRequired: true
+      } 
+    },
+    "params"
+  ),
+  todoController.delete
+)
 
 export { TodoRouter }

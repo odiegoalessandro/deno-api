@@ -1,4 +1,6 @@
 import { Router } from 'express'
+import { Types } from 'mongoose'
+import { validateRequest } from '../../middlewares/validateRequest.ts'
 import { UserController } from './UserController.ts'
 
 const UserRouter = Router()
@@ -27,7 +29,25 @@ const userController = new UserController()
  *       201:
  *         description: Usuário criado
  */
-UserRouter.post('/', userController.create)
+UserRouter.post(
+  '/', 
+  validateRequest(
+    ['name', 'email', 'password'],
+    {
+      email: { 
+        validator: (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 
+        message: 'Email inválido', 
+        isRequired: true
+       },
+      password: { 
+        validator: (v: string) => v.length >= 6, 
+        message: 'Senha deve ter ao menos 6 caracteres',
+        isRequired: true
+      }
+    }
+  ),
+  userController.create
+)
 
 /**
  * @openapi
@@ -47,7 +67,19 @@ UserRouter.post('/', userController.create)
  *       404:
  *         description: Usuário não encontrado
  */
-UserRouter.get('/:id', userController.findById)
+UserRouter.get('/:id',  
+  validateRequest(
+    ['id'],
+    { id: { 
+        validator: (v: string) => Types.ObjectId.isValid(v), 
+        message: 'id inválido', 
+        isRequired: true
+      } 
+    },
+    "params"
+  ), 
+  userController.findById
+)
 
 /**
  * @openapi
@@ -99,7 +131,20 @@ UserRouter.get('/', userController.findAll)
  *       200:
  *         description: Usuário atualizado
  */
-UserRouter.patch('/:id', userController.update)
+UserRouter.patch(
+  '/:id',
+  validateRequest(
+    ['id'],
+    { id: { 
+        validator: (v: string) => Types.ObjectId.isValid(v), 
+        message: 'id inválido',
+        isRequired: true 
+      } 
+    },
+    "params"
+  ),
+  userController.update
+)
 
 /**
  * @openapi
@@ -117,6 +162,19 @@ UserRouter.patch('/:id', userController.update)
  *       204:
  *         description: Usuário deletado
  */
-UserRouter.delete('/:id', userController.delete)
+UserRouter.delete(
+  '/:id',
+  validateRequest(
+    ['id'],
+    { id: { 
+        validator: (v: string) => Types.ObjectId.isValid(v), 
+        message: 'id inválido',
+        isRequired: true
+      } 
+    },
+    "params"
+  ),
+  userController.delete
+)
 
 export { UserRouter }

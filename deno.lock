@@ -14,6 +14,8 @@
     "npm:mongoose-sequence@6.0.1": "6.0.1_mongoose@8.16.1",
     "npm:mongoose@8.16.1": "8.16.1",
     "npm:morgan@^1.10.0": "1.10.1",
+    "npm:request-check@*": "1.5.4",
+    "npm:request-check@^1.5.4": "1.5.4",
     "npm:responser@^2.5.6": "2.5.6",
     "npm:swagger-jsdoc@*": "6.2.8",
     "npm:swagger-ui-express@*": "5.0.1_express@4.21.2",
@@ -656,6 +658,9 @@
         "unpipe"
       ]
     },
+    "request-check@1.5.4": {
+      "integrity": "sha512-6ueNBggdrPwG69Der1z0Ydv5MDqC81CRMo+AG8+uAMzlpnfQmVlr/C+dmP4ybbezQ7NbAQ5BNCBF/eKUH3DfUg=="
+    },
     "responser@2.5.6": {
       "integrity": "sha512-CAf7EE9rty9yIzIcIj7Ukcq9nR+Uj3pFXcDESB1etwIa9S1FdNXhECepmShdbFwlJ8lsX7MDjvvredesGwhMJQ==",
       "dependencies": [
@@ -854,7 +859,9 @@
     "https://esm.sh/dayjs@1.11.13/denonext/plugin/timezone.mjs": "94d48607684cc8423f815fee4e72bf334c801cdf52d79caa00481a7e83c345f4",
     "https://esm.sh/dayjs@1.11.13/denonext/plugin/utc.mjs": "7e89223a0933377aaa5fd52d97f116ed3d48c93d5b2ed305d86bde9e496b3e12",
     "https://esm.sh/dayjs@1.11.13/plugin/timezone": "cfe2b0eec9855373de8fbc92d3503d25930ab3156522482e55f7a66bb3d4fb32",
-    "https://esm.sh/dayjs@1.11.13/plugin/utc": "2e41a0673e6e7c7c962983f1680911ef6feb27ded6007bc7705787ac1b2637b7"
+    "https://esm.sh/dayjs@1.11.13/plugin/utc": "2e41a0673e6e7c7c962983f1680911ef6feb27ded6007bc7705787ac1b2637b7",
+    "https://esm.sh/request-check@1.0.0": "10289f7f154f73685476552a925a8019770f9c83253105ba86598c89cbfc8207",
+    "https://esm.sh/request-check@1.0.0/denonext/request-check.mjs": "9ff362db72b4df674ac0b8b44526d468b4322415cd861dcb972e133dd34f3fbb"
   },
   "workspace": {
     "dependencies": [
@@ -864,6 +871,7 @@
       "npm:mongoose-sequence@6.0.1",
       "npm:mongoose@8.16.1",
       "npm:morgan@^1.10.0",
+      "npm:request-check@^1.5.4",
       "npm:responser@^2.5.6"
     ]
   }
