@@ -1,6 +1,6 @@
 // import { aggregatePaginate } from 'npm:mongoose-aggregate-paginate-v2';
 import is from '@zarco/isness'
-import {
+import mongoose, {
   Aggregate,
   AggregateOptions,
   FilterQuery,
@@ -11,6 +11,7 @@ import {
   Types,
   UpdateQuery,
 } from 'mongoose'
+import aggregatePaginate from "npm:mongoose-aggregate-paginate-v2@^1"
 
 import { SaveOptions } from 'mongoose'
 import { throwlhos } from '../globals/Throwlhos.ts'
@@ -86,6 +87,8 @@ export type ModelVirtuals<IModel, IModelVirtuals> = Model<
   object,
   IModelVirtuals
 >
+
+mongoose.plugin(aggregatePaginate)
 
 export class BaseRepository<
   T, // TRawDocType: The base document interface

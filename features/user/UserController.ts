@@ -27,20 +27,21 @@ class UserController {
   findAll = async (req: Request, res: Response) => {
     const page = Math.max(1, Number(req.query.page) || 1)
     const limit = Math.max(1, Number(req.query.limit) || 10)
-    const skip = (page - 1) * limit
 
-    const [users, total] = await Promise.all([
-      this.userRepository.findMany({}).skip(skip).limit(limit),
-      this.userRepository.countDocuments({})
-    ])
+    const result = await this.userRepository.paginate(
+      [
+        { $match: {} },
+        { $sort: { createdAt: -1 } }
+      ], 
+      {
+        paginate: {
+          page,
+          limit
+        }
+      }
+    )
 
-    return res.send_ok("Users found successfully", {
-      data: users,
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    })
+    return res.send_ok("Users found successfully", result)
   }
 
   findById = async (req: Request, res: Response) => {

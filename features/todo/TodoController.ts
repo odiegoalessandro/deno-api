@@ -14,6 +14,10 @@ class TodoController {
   create = async (req: Request, res: Response) => {
     const { description, userId } = req.body
 
+    if (!description || !userId) {
+      return throwlhos.err_badRequest("description and userId are required")
+    }
+
     const [todo] = await this.todoRepository.create({
       description,
       userId,
@@ -22,23 +26,26 @@ class TodoController {
     return res.send_created("TODO created successfully", todo)
   }
 
+
   findAll = async (req: Request, res: Response) => {
+
     const page = Math.max(1, Number(req.query.page) || 1)
     const limit = Math.max(1, Number(req.query.limit) || 10)
-    const skip = (page - 1) * limit
+    const result = await this.todoRepository.paginate(
+      [
+        { $match: { } },
+        { $sort: { createdAt: -1 } }
+      ], 
+      { 
+        paginate: 
+          { 
+            page, 
+            limit 
+          } 
+        }
+    )
 
-    const [todos, total] = await Promise.all([
-      this.todoRepository.findMany({}).skip(skip).limit(limit),
-      this.todoRepository.countDocuments({})
-    ])
-
-    return res.send_ok("TODOs found successfully", {
-      data: todos,
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    })
+    return res.send_ok("TODOs found successfully", result)
   }
 
   findById = async (req: Request, res: Response) => {
@@ -56,12 +63,26 @@ class TodoController {
     const { userId } = req.params
     const page = Math.max(1, Number(req.query.page) || 1)
     const limit = Math.max(1, Number(req.query.limit) || 10)
+    const match: Record<string, unknown> = { userId: new Types.ObjectId(userId) }
     const isCompleted: boolean | null =
       req.query.isCompleted === undefined
         ? null
         : req.query.isCompleted === 'true';
 
-    const result = await this.todoRepository.findByUser(new Types.ObjectId(userId), page, limit, isCompleted)
+    
+    if (isCompleted !== null) { 
+      match.isCompleted = isCompleted
+    }
+
+    const result = await this.todoRepository.paginate(
+      [
+        { $match: match },
+        { $sort: { createdAt: -1 } }
+      ],
+      {
+        paginate: { page, limit }
+      }
+    )
 
     return res.send_ok("TODOs by user found successfully", result)
   }
